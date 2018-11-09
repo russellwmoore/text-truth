@@ -10,10 +10,16 @@ export class Text extends React.Component {
     super()
     this.state = {
       text: '',
+      textTwo: '',
       tones: [],
-      uniqueWords: {}
+      tonesTwo: [],
+      uniqueWords: {},
+      uniqueWordsTwo: {},
+      totalWords: 0,
+      totalWords2: 0
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleSubmitTwo = this.handleSubmitTwo.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -41,12 +47,6 @@ export class Text extends React.Component {
     }
     return uniqueWords
   }
-
-  // sortedWordArr(wordObj) {
-  //   Object.keys(obj).sort((a,b)=> {
-  //     return obj[b] - obj[a]
-  //   })
-  // }
 
 
   topNWords(wordObject, n) {
@@ -77,43 +77,88 @@ export class Text extends React.Component {
     console.log('pressed!')
     console.log(this.state.text)
     let res = await axios.post('/api/tone', { text: this.state.text })
-
+    // let resTwo = await axios.post('/api/personality', { content: this.state.text })
     console.log(res.data.document_tone.tones)
+    // console.log(resTwo.data)
     this.setState({
       tones: res.data.document_tone.tones,
       uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 100)
     })
+  }
 
-
-
+  async handleSubmitTwo(event) {
+    event.preventDefault()
+    console.log('pressed!')
+    console.log(this.state.textTwo)
+    let res = await axios.post('/api/tone', { text: this.state.textTwo })
+    // let resTwo = await axios.post('/api/personality', { content: this.state.text })
+    console.log(res.data.document_tone.tones)
+    // console.log(resTwo.data)
+    this.setState({
+      tonesTwo: res.data.document_tone.tones,
+      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 100)
+    })
   }
 
   render() {
     const words = Object.keys(this.state.uniqueWords)
+    const wordsTwo = Object.keys(this.state.uniqueWordsTwo)
     return (
-      <div>
-        <h3>CHECK OUT THIS TEXT</h3>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Text to analyze:
+      <div className='container'>
+        <div className='analysis'>
+          <div>
+            {/* <h3>CHECK OUT THIS TEXT</h3> */}
+          </div>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Text to analyze:
           </label>
-          <textarea onChange={this.handleChange} name="text" rows="10" cols="30" value={this.state.text} />
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
-        <div>
-          {this.state.tones && this.state.tones.map(tone => {
-            return (
-              <p key={tone.tone_name}>{tone.tone_name} : {tone.score}</p>
-            )
-          })}
+            <textarea onChange={this.handleChange} name="text" rows="10" cols="30" value={this.state.text} />
+            <br />
+            <input type="submit" value="Submit" />
+          </form>
+          <div>
+            <h1>Results 1</h1>
+            {this.state.tones && this.state.tones.map(tone => {
+              return (
+                <p key={tone.tone_name}>{tone.tone_name} : {tone.score}</p>
+              )
+            })}
+          </div>
+
+          <div>
+            {words.map(word => {
+              return (
+                <p>{word} : {this.state.uniqueWords[word]}</p>
+              )
+            })}
+          </div>
         </div>
-        <div>
-          {words.map(word => {
-            return (
-              <p>{word} : {this.state.uniqueWords[word]}</p>
-            )
-          })}
+        <div className='analysis'>
+          <form onSubmit={this.handleSubmitTwo}>
+            <label>
+              Text to analyze 2:
+          </label>
+            <textarea onChange={this.handleChange} name="textTwo" rows="10" cols="30" value={this.state.textTwo} />
+            <br />
+            <input type="submit" value="Submit" />
+          </form>
+
+          <div>
+            <h1>Results 2</h1>
+            {this.state.tonesTwo && this.state.tonesTwo.map(tone => {
+              return (
+                <p key={tone.tone_name}>{tone.tone_name} : {tone.score}</p>
+              )
+            })}
+          </div>
+          <div>
+            {wordsTwo.map(word => {
+              return (
+                <p>{word} : {this.state.uniqueWordsTwo[word]}</p>
+              )
+            })}
+          </div>
         </div>
       </div>
     )
