@@ -1,7 +1,7 @@
 
 const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 const toneAnalyzer = new ToneAnalyzerV3({
-  iam_apikey: 'S6NqVmdCqBqmyoBXT17tdl8FTcyr9j_rbZwE5oPGgPAr',
+  iam_apikey: process.env.WATSON_API,
   version: '2017-09-21',
   url: 'https://gateway-wdc.watsonplatform.net/tone-analyzer/api'
 });

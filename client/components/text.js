@@ -42,6 +42,35 @@ export class Text extends React.Component {
     return uniqueWords
   }
 
+  // sortedWordArr(wordObj) {
+  //   Object.keys(obj).sort((a,b)=> {
+  //     return obj[b] - obj[a]
+  //   })
+  // }
+
+
+  topNWords(wordObject, n) {
+    // const weakWords = ['the', 'a', 'and', 'to', 'in', 'of', 'he', 'was', 'that', 'as', 'not', 'for', '—', 'his', 'it']
+    const weakWords = []
+    for (const words in wordObject) {
+      if (weakWords.includes(words)) {
+        delete wordObject[words]
+      }
+      if (words.length < 4 && words !== 'i') {
+        delete wordObject[words]
+      }
+    }
+    const sortedWordArr = Object.keys(wordObject).sort((a, b) => {
+      return wordObject[b] - wordObject[a]
+    })
+
+    const topN = sortedWordArr.slice(0, n)
+    const sortedWords = {}
+    for (let i = 0; i < topN.length; i++) {
+      sortedWords[topN[i]] = wordObject[topN[i]]
+    }
+    return sortedWords
+  }
 
   async handleSubmit(event) {
     event.preventDefault()
@@ -51,12 +80,16 @@ export class Text extends React.Component {
 
     console.log(res.data.document_tone.tones)
     this.setState({
-      tones: res.data.document_tone.tones
+      tones: res.data.document_tone.tones,
+      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 100)
     })
+
+
 
   }
 
   render() {
+    const words = Object.keys(this.state.uniqueWords)
     return (
       <div>
         <h3>CHECK OUT THIS TEXT</h3>
@@ -65,15 +98,23 @@ export class Text extends React.Component {
             Text to analyze:
           </label>
           <textarea onChange={this.handleChange} name="text" rows="10" cols="30" value={this.state.text} />
+          <br />
           <input type="submit" value="Submit" />
-          <div>
-            {this.state.tones && this.state.tones.map(tone => {
-              return (
-                <p>{tone.tone_name} : {tone.score}</p>
-              )
-            })}
-          </div>
         </form>
+        <div>
+          {this.state.tones && this.state.tones.map(tone => {
+            return (
+              <p key={tone.tone_name}>{tone.tone_name} : {tone.score}</p>
+            )
+          })}
+        </div>
+        <div>
+          {words.map(word => {
+            return (
+              <p>{word} : {this.state.uniqueWords[word]}</p>
+            )
+          })}
+        </div>
       </div>
     )
   }
