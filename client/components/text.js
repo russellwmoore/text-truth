@@ -14,6 +14,8 @@ export class Text extends React.Component {
       tones: [],
       tonesTwo: [],
       uniqueWords: {},
+      uniqueWordsCount: 0,
+      uniqueWordsCountTwo: 0,
       uniqueWordsTwo: {},
       totalWords: 0,
       totalWords2: 0
@@ -50,8 +52,8 @@ export class Text extends React.Component {
 
 
   topNWords(wordObject, n) {
-    // const weakWords = ['the', 'a', 'and', 'to', 'in', 'of', 'he', 'was', 'that', 'as', 'not', 'for', '—', 'his', 'it']
-    const weakWords = []
+    const weakWords = ['the', 'a', 'and', 'to', 'in', 'of', 'he', 'was', 'that', 'as', 'not', 'for', '—', 'his', 'it']
+    // const weakWords = []
     for (const words in wordObject) {
       if (weakWords.includes(words)) {
         delete wordObject[words]
@@ -82,7 +84,8 @@ export class Text extends React.Component {
     // console.log(resTwo.data)
     this.setState({
       tones: res.data.document_tone.tones,
-      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 100)
+      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 100),
+      uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length
     })
   }
 
@@ -96,7 +99,9 @@ export class Text extends React.Component {
     // console.log(resTwo.data)
     this.setState({
       tonesTwo: res.data.document_tone.tones,
-      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 100)
+      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 100),
+      uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo)).length
+
     })
   }
 

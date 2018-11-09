@@ -24,3 +24,7 @@ form div {
   display: flex;
   flex-wrap: wrap;
 }
+
+.analysis{
+  padding:35px;
+}

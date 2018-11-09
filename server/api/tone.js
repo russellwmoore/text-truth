@@ -12,7 +12,6 @@ router.post('/', (req, res, next) => {
 
   toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
     if (error) {
-
       console.log(error);
       res.send(error)
     } else {
