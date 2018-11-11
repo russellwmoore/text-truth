@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import MyStockChart from './chart'
+import {obama} from './samples'
 
 /**
  * COMPONENT
@@ -18,14 +19,15 @@ export class Text extends React.Component {
       uniqueWordsCount: 0,
       uniqueWordsCountTwo: 0,
       uniqueWordsTwo: {},
-      totalWords: 0,
-      totalWords2: 0,
+      totalWords: [],
+      totalWords2: [],
       sentiments: [],
       sentimentsTwo: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmitTwo = this.handleSubmitTwo.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.addText = this.addText.bind(this)
   }
 
   handleChange(event) {
@@ -41,7 +43,7 @@ export class Text extends React.Component {
       ''
     )
     return noPunct
-      .replace(/\n\r/g, '')
+      .replace(/(\r\n|\n|\r)/gm, ' ')
       .split(' ')
       .sort()
   }
@@ -49,11 +51,12 @@ export class Text extends React.Component {
   uniqueWords(string) {
     // regex get rid of all punctuation, replace with ''.
     const lowerCase = string.toLowerCase()
+
     const noPunct = lowerCase.replace(
       /[!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g,
       ''
     )
-    const noLineBreaks = noPunct.replace(/\n\r/g, '')
+    const noLineBreaks = noPunct.replace(/(\r\n|\n|\r)/gm, ' ')
 
     const wordArr = noLineBreaks.split(' ')
     const uniqueWords = {}
@@ -92,7 +95,7 @@ export class Text extends React.Component {
       if (weakWords.includes(words)) {
         delete wordObject[words]
       }
-      if (words.length < 4 && words !== 'i') {
+      if (words.length < 3 && words !== 'i') {
         delete wordObject[words]
       }
     }
@@ -140,6 +143,14 @@ export class Text extends React.Component {
     return resultArr
   }
 
+  addText() {
+    console.log('pressed')
+    this.setState({
+      text: obama
+    })
+    console.log(`this is state: `, this.state)
+  }
+
   async handleSubmit(event) {
     event.preventDefault()
     console.log('pressed!')
@@ -150,7 +161,8 @@ export class Text extends React.Component {
       tones: res.data.document_tone.tones,
       uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 10),
       uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length,
-      sentiments: this.makeSentimentArray(res.data.document_tone.tones)
+      sentiments: this.makeSentimentArray(res.data.document_tone.tones),
+      totalWords: this.getWords(this.state.text)
     })
   }
 
@@ -167,17 +179,20 @@ export class Text extends React.Component {
       uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 10),
       uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo))
         .length,
-      sentimentsTwo: this.makeSentimentArray(res.data.document_tone.tones)
+      sentimentsTwo: this.makeSentimentArray(res.data.document_tone.tones),
+      totalWordsTwo: this.getWords(this.state.textTwo)
     })
   }
 
   render() {
     const words = Object.keys(this.state.uniqueWords)
     const wordsTwo = Object.keys(this.state.uniqueWordsTwo)
+    console.log(this.state.totalWordsTwo)
     return (
       <div className="container">
         <div className="analysis">
           <div>{/* <h3>CHECK OUT THIS TEXT</h3> */}</div>
+          <button onClick={this.addText}>Obama</button>
           <form onSubmit={this.handleSubmit}>
             <label>Text to analyze:</label>
             <textarea
@@ -198,7 +213,10 @@ export class Text extends React.Component {
               </div>
             )}
             {this.state.uniqueWordsCount > 0 && (
-              <p>Unique Words Count: {this.state.uniqueWordsCount}</p>
+              <div>
+                <p>Total Words Count: {this.state.totalWords.length}</p>
+                <p>Unique Words Count: {this.state.uniqueWordsCount}</p>
+              </div>
             )}
           </div>
           <div>
@@ -233,7 +251,10 @@ export class Text extends React.Component {
               </div>
             )}
             {this.state.uniqueWordsCountTwo > 0 && (
-              <p>Unique Words Count: {this.state.uniqueWordsCountTwo}</p>
+              <div>
+                <p>Total Words Count: {this.state.totalWordsTwo.length}</p>
+                <p>Unique Words Count: {this.state.uniqueWordsCountTwo}</p>
+              </div>
             )}
           </div>
           <div>
