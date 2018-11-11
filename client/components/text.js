@@ -1,6 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import axios from 'axios'
+import MyStockChart from './chart'
 
 /**
  * COMPONENT
@@ -18,13 +19,14 @@ export class Text extends React.Component {
       uniqueWordsCountTwo: 0,
       uniqueWordsTwo: {},
       totalWords: 0,
-      totalWords2: 0
+      totalWords2: 0,
+      sentiments: [],
+      sentimentsTwo: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmitTwo = this.handleSubmitTwo.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
-
 
   handleChange(event) {
     this.setState({
@@ -32,11 +34,28 @@ export class Text extends React.Component {
     })
   }
 
+  getWords(string) {
+    const lowerCase = string.toLowerCase()
+    const noPunct = lowerCase.replace(
+      /[!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g,
+      ''
+    )
+    return noPunct
+      .replace(/\n\r/g, '')
+      .split(' ')
+      .sort()
+  }
+
   uniqueWords(string) {
     // regex get rid of all punctuation, replace with ''.
     const lowerCase = string.toLowerCase()
-    const noPunct = lowerCase.replace(/[!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g, '')
-    const wordArr = noPunct.split(' ')
+    const noPunct = lowerCase.replace(
+      /[!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g,
+      ''
+    )
+    const noLineBreaks = noPunct.replace(/\n\r/g, '')
+
+    const wordArr = noLineBreaks.split(' ')
     const uniqueWords = {}
 
     for (let i = 0; i < wordArr.length; i++) {
@@ -50,9 +69,24 @@ export class Text extends React.Component {
     return uniqueWords
   }
 
-
   topNWords(wordObject, n) {
-    const weakWords = ['the', 'a', 'and', 'to', 'in', 'of', 'he', 'was', 'that', 'as', 'not', 'for', '—', 'his', 'it']
+    const weakWords = [
+      'the',
+      'a',
+      'and',
+      'to',
+      'in',
+      'of',
+      'he',
+      'was',
+      'that',
+      'as',
+      'not',
+      'for',
+      '—',
+      'his',
+      'it'
+    ]
     // const weakWords = []
     for (const words in wordObject) {
       if (weakWords.includes(words)) {
@@ -74,18 +108,49 @@ export class Text extends React.Component {
     return sortedWords
   }
 
+  makeSentimentArray(arr) {
+    let resultArr = [0, 0, 0, 0, 0, 0, 0]
+    for (let i = 0; i < arr.length; i++) {
+      switch (arr[i].tone_id) {
+        case 'anger':
+          resultArr[0] = Math.round(arr[i].score * 100)
+          break
+        case 'fear':
+          resultArr[1] = Math.round(arr[i].score * 100)
+          break
+        case 'joy':
+          resultArr[2] = Math.round(arr[i].score * 100)
+          break
+        case 'sadness':
+          resultArr[3] = Math.round(arr[i].score * 100)
+          break
+        case 'analytical':
+          resultArr[4] = Math.round(arr[i].score * 100)
+          break
+        case 'confident':
+          resultArr[5] = Math.round(arr[i].score * 100)
+          break
+        case 'tentative':
+          resultArr[6] = Math.round(arr[i].score * 100)
+          break
+        default:
+          break
+      }
+    }
+    return resultArr
+  }
+
   async handleSubmit(event) {
     event.preventDefault()
     console.log('pressed!')
     console.log(this.state.text)
-    let res = await axios.post('/api/tone', { text: this.state.text })
-    // let resTwo = await axios.post('/api/personality', { content: this.state.text })
+    let res = await axios.post('/api/tone', {text: this.state.text})
     console.log(res.data.document_tone.tones)
-    // console.log(resTwo.data)
     this.setState({
       tones: res.data.document_tone.tones,
-      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 100),
-      uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length
+      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 10),
+      uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length,
+      sentiments: this.makeSentimentArray(res.data.document_tone.tones)
     })
   }
 
@@ -93,15 +158,16 @@ export class Text extends React.Component {
     event.preventDefault()
     console.log('pressed!')
     console.log(this.state.textTwo)
-    let res = await axios.post('/api/tone', { text: this.state.textTwo })
+    let res = await axios.post('/api/tone', {text: this.state.textTwo})
     // let resTwo = await axios.post('/api/personality', { content: this.state.text })
     console.log(res.data.document_tone.tones)
     // console.log(resTwo.data)
     this.setState({
       tonesTwo: res.data.document_tone.tones,
-      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 100),
-      uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo)).length
-
+      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 10),
+      uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo))
+        .length,
+      sentimentsTwo: this.makeSentimentArray(res.data.document_tone.tones)
     })
   }
 
@@ -109,58 +175,73 @@ export class Text extends React.Component {
     const words = Object.keys(this.state.uniqueWords)
     const wordsTwo = Object.keys(this.state.uniqueWordsTwo)
     return (
-      <div className='container'>
-        <div className='analysis'>
-          <div>
-            {/* <h3>CHECK OUT THIS TEXT</h3> */}
-          </div>
+      <div className="container">
+        <div className="analysis">
+          <div>{/* <h3>CHECK OUT THIS TEXT</h3> */}</div>
           <form onSubmit={this.handleSubmit}>
-            <label>
-              Text to analyze:
-          </label>
-            <textarea onChange={this.handleChange} name="text" rows="10" cols="30" value={this.state.text} />
+            <label>Text to analyze:</label>
+            <textarea
+              onChange={this.handleChange}
+              name="text"
+              rows="10"
+              cols="60"
+              value={this.state.text}
+            />
             <br />
             <input type="submit" value="Submit" />
           </form>
           <div>
-            <h1>Results 1</h1>
-            {this.state.tones && this.state.tones.map(tone => {
-              return (
-                <p key={tone.tone_name}>{tone.tone_name} : {tone.score}</p>
-              )
-            })}
+            {this.state.sentiments.length > 0 && (
+              <div>
+                <h1>Results 1</h1>
+                <MyStockChart data={this.state.sentiments} />
+              </div>
+            )}
+            {this.state.uniqueWordsCount > 0 && (
+              <p>Unique Words Count: {this.state.uniqueWordsCount}</p>
+            )}
           </div>
-
           <div>
             {words.map(word => {
               return (
-                <p>{word} : {this.state.uniqueWords[word]}</p>
+                <p>
+                  {word} : {this.state.uniqueWords[word]}
+                </p>
               )
             })}
           </div>
         </div>
-        <div className='analysis'>
+        <div className="analysis">
           <form onSubmit={this.handleSubmitTwo}>
-            <label>
-              Text to analyze 2:
-          </label>
-            <textarea onChange={this.handleChange} name="textTwo" rows="10" cols="30" value={this.state.textTwo} />
+            <label>Text to analyze 2:</label>
+            <textarea
+              onChange={this.handleChange}
+              name="textTwo"
+              rows="10"
+              cols="60"
+              value={this.state.textTwo}
+            />
             <br />
             <input type="submit" value="Submit" />
           </form>
 
           <div>
-            <h1>Results 2</h1>
-            {this.state.tonesTwo && this.state.tonesTwo.map(tone => {
-              return (
-                <p key={tone.tone_name}>{tone.tone_name} : {tone.score}</p>
-              )
-            })}
+            {this.state.sentimentsTwo.length > 0 && (
+              <div>
+                <h1>Results 2</h1>
+                <MyStockChart data={this.state.sentimentsTwo} />
+              </div>
+            )}
+            {this.state.uniqueWordsCountTwo > 0 && (
+              <p>Unique Words Count: {this.state.uniqueWordsCountTwo}</p>
+            )}
           </div>
           <div>
             {wordsTwo.map(word => {
               return (
-                <p>{word} : {this.state.uniqueWordsTwo[word]}</p>
+                <p>
+                  {word} : {this.state.uniqueWordsTwo[word]}
+                </p>
               )
             })}
           </div>
@@ -170,14 +251,4 @@ export class Text extends React.Component {
   }
 }
 
-/**
- * CONTAINER
- */
-const mapState = state => {
-  return {
-    email: state.user.email
-  }
-}
-
-export default connect(mapState)(Text)
-
+export default Text

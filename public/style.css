@@ -25,6 +25,7 @@ form div {
   flex-wrap: wrap;
 }
 
-.analysis{
-  padding:35px;
+.analysis {
+  padding: 35px;
+  width: 350px;
 }
