@@ -8,7 +8,7 @@ const MyStockChart = props => {
       type: 'bar'
     },
     title: {
-      text: 'Sentiment'
+      text: 'Tone'
     },
     subtitle: {
       text: ''
@@ -28,7 +28,7 @@ const MyStockChart = props => {
       }
     },
     yAxis: {
-      min: 0,
+      min: 50,
       max: 100,
       title: {
         text: '',

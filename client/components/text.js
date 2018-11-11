@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import MyStockChart from './chart'
-import {obama} from './samples'
+import sampleData from './samples'
 
 /**
  * COMPONENT
@@ -22,7 +22,8 @@ export class Text extends React.Component {
       totalWords: [],
       totalWords2: [],
       sentiments: [],
-      sentimentsTwo: []
+      sentimentsTwo: [],
+      samples: sampleData
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmitTwo = this.handleSubmitTwo.bind(this)
@@ -143,12 +144,10 @@ export class Text extends React.Component {
     return resultArr
   }
 
-  addText() {
-    console.log('pressed')
+  addText(event, state) {
     this.setState({
-      text: obama
+      [state]: sampleData[event]
     })
-    console.log(`this is state: `, this.state)
   }
 
   async handleSubmit(event) {
@@ -187,84 +186,116 @@ export class Text extends React.Component {
   render() {
     const words = Object.keys(this.state.uniqueWords)
     const wordsTwo = Object.keys(this.state.uniqueWordsTwo)
-    console.log(this.state.totalWordsTwo)
+    const samplesArr = Object.keys(this.state.samples)
     return (
-      <div className="container">
-        <div className="analysis">
-          <div>{/* <h3>CHECK OUT THIS TEXT</h3> */}</div>
-          <button onClick={this.addText}>Obama</button>
-          <form onSubmit={this.handleSubmit}>
-            <label>Text to analyze:</label>
-            <textarea
-              onChange={this.handleChange}
-              name="text"
-              rows="10"
-              cols="60"
-              value={this.state.text}
-            />
-            <br />
-            <input type="submit" value="Submit" />
-          </form>
-          <div>
-            {this.state.sentiments.length > 0 && (
-              <div>
-                <h1>Results 1</h1>
-                <MyStockChart data={this.state.sentiments} />
-              </div>
-            )}
-            {this.state.uniqueWordsCount > 0 && (
-              <div>
-                <p>Total Words Count: {this.state.totalWords.length}</p>
-                <p>Unique Words Count: {this.state.uniqueWordsCount}</p>
-              </div>
-            )}
+      <div className="wrapper">
+        <div>Text ? Truth</div>
+        <div className="container">
+          <div className="analysis">
+            <select
+              onChange={e => this.addText(e.target.value, 'text')}
+              id="text-select"
+            >
+              <option value="">--Sample Text--</option>
+              {samplesArr.map(sample => {
+                return (
+                  <option key={`${sample}`} value={`${sample}`}>
+                    {sample}
+                  </option>
+                )
+              })}
+            </select>
+            <form onSubmit={this.handleSubmit}>
+              <label>Text to analyze:</label>
+              <textarea
+                onChange={this.handleChange}
+                name="text"
+                rows="10"
+                cols="60"
+                value={this.state.text}
+              />
+              <br />
+              <input type="submit" value="Submit" />
+            </form>
+            <div>
+              {this.state.sentiments.length > 0 && (
+                <div>
+                  <MyStockChart data={this.state.sentiments} />
+                </div>
+              )}
+              {this.state.uniqueWordsCount > 0 && (
+                <div className="word-analysis-container">
+                  <div className="word-analysis">
+                    Total Words: {this.state.totalWords.length}
+                  </div>
+                  <div className="word-analysis">
+                    Unique Words: {this.state.uniqueWordsCount}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="unique-words-container">
+              {words.map(word => {
+                return (
+                  <div className="uniqe-words" key={word}>
+                    {word} : {this.state.uniqueWords[word]}
+                  </div>
+                )
+              })}
+            </div>
           </div>
-          <div>
-            {words.map(word => {
-              return (
-                <p>
-                  {word} : {this.state.uniqueWords[word]}
-                </p>
-              )
-            })}
-          </div>
-        </div>
-        <div className="analysis">
-          <form onSubmit={this.handleSubmitTwo}>
-            <label>Text to analyze 2:</label>
-            <textarea
-              onChange={this.handleChange}
-              name="textTwo"
-              rows="10"
-              cols="60"
-              value={this.state.textTwo}
-            />
-            <br />
-            <input type="submit" value="Submit" />
-          </form>
-
-          <div>
-            {this.state.sentimentsTwo.length > 0 && (
-              <div>
-                <h1>Results 2</h1>
-                <MyStockChart data={this.state.sentimentsTwo} />
-              </div>
-            )}
-            {this.state.uniqueWordsCountTwo > 0 && (
-              <div>
-                <p>Total Words Count: {this.state.totalWordsTwo.length}</p>
-                <p>Unique Words Count: {this.state.uniqueWordsCountTwo}</p>
-              </div>
-            )}
-          </div>
-          <div>
-            {wordsTwo.map(word => {
-              return (
-                <p>
-                  {word} : {this.state.uniqueWordsTwo[word]}
-                </p>
-              )
-            })}
+          <div className="analysis">
+            <select
+              onChange={e => this.addText(e.target.value, 'textTwo')}
+              id="text-select"
+            >
+              <option value="">--Sample Text--</option>
+              {samplesArr.map(sample => {
+                return (
+                  <option key={`${sample}`} value={`${sample}`}>
+                    {sample}
+                  </option>
+                )
+              })}
+            </select>
+            <form onSubmit={this.handleSubmitTwo}>
+              <label>Text to analyze 2:</label>
+              <textarea
+                onChange={this.handleChange}
+                name="textTwo"
+                rows="10"
+                cols="60"
+                value={this.state.textTwo}
+              />
+              <br />
+              <input type="submit" value="Submit" />
+            </form>
+            <div>
+              {this.state.sentimentsTwo.length > 0 && (
+                <div>
+                  <MyStockChart data={this.state.sentimentsTwo} />
+                </div>
+              )}
+              {this.state.uniqueWordsCountTwo > 0 && (
+                <div className="word-analysis-container">
+                  <div className="word-analysis">
+                    Total Words: {this.state.totalWordsTwo.length}
+                  </div>
+                  <div className="word-analysis">
+                    Unique Words: {this.state.uniqueWordsCountTwo}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="unique-words-container">
+              {wordsTwo.map(word => {
+                return (
+                  <div className="uniqe-words" key={word}>
+                    {word} : {this.state.uniqueWordsTwo[word]}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>

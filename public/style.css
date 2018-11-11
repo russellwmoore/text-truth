@@ -29,3 +29,23 @@ form div {
   padding: 35px;
   width: 350px;
 }
+
+.uniqe-words {
+  background-color: red;
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.word-analysis-container {
+  display: flex;
+}
+
+.word-analysis {
+  background-color: blue;
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+}
