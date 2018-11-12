@@ -88,7 +88,8 @@ export class Text extends React.Component {
       'for',
       '—',
       'his',
-      'it'
+      'it',
+      'but'
     ]
     // const weakWords = []
     for (const words in wordObject) {
@@ -157,7 +158,7 @@ export class Text extends React.Component {
     console.log(res.data.document_tone.tones)
     this.setState({
       tones: res.data.document_tone.tones,
-      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 10),
+      uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 20),
       uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length,
       sentiments: this.makeSentimentArray(res.data.document_tone.tones),
       totalWords: this.getWords(this.state.text)
@@ -174,7 +175,7 @@ export class Text extends React.Component {
     // console.log(resTwo.data)
     this.setState({
       tonesTwo: res.data.document_tone.tones,
-      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 10),
+      uniqueWordsTwo: this.topNWords(this.uniqueWords(this.state.textTwo), 20),
       uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo))
         .length,
       sentimentsTwo: this.makeSentimentArray(res.data.document_tone.tones),
