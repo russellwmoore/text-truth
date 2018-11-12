@@ -69,7 +69,7 @@ const MyStockChart = props => {
     },
     series: [
       {
-        name: 'Sentiment',
+        name: 'Tone',
         data: [10, 10, 10, 10, 10]
       }
     ]
