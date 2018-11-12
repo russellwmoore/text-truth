@@ -115,3 +115,7 @@ textarea:focus {
   margin: 0 auto;
   text-align: center;
 }
+
+h1#title {
+  font-weight: 100;
+}
