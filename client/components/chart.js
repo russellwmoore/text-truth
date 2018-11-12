@@ -5,7 +5,9 @@ import HighchartsReact from 'highcharts-react-official'
 const MyStockChart = props => {
   const options = {
     chart: {
-      type: 'bar'
+      type: 'bar',
+      plotBackgroundColor: '#deedf9',
+      backgroundColor: '#deedf9'
     },
     title: {
       text: 'Tone'
@@ -23,6 +25,7 @@ const MyStockChart = props => {
         'Confident',
         'Tentative'
       ],
+
       title: {
         text: null
       }
@@ -36,7 +39,8 @@ const MyStockChart = props => {
       },
       labels: {
         overflow: 'justify'
-      }
+      },
+      gridLineColor: '#ACCBE2'
     },
     tooltip: {
       valueSuffix: ' Percent'

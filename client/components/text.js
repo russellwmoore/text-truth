@@ -1,5 +1,4 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import axios from 'axios'
 import MyStockChart from './chart'
 import sampleData from './samples'
@@ -189,10 +188,14 @@ export class Text extends React.Component {
     const samplesArr = Object.keys(this.state.samples)
     return (
       <div className="wrapper">
-        <div>Text ? Truth</div>
+        <div id="title-container">
+          <h1 id="title">Text ? Truth</h1>
+          <h3>AI Expectations vs Results</h3>
+        </div>
         <div className="container">
           <div className="analysis">
             <select
+              className="select-data"
               onChange={e => this.addText(e.target.value, 'text')}
               id="text-select"
             >
@@ -206,13 +209,13 @@ export class Text extends React.Component {
               })}
             </select>
             <form onSubmit={this.handleSubmit}>
-              <label>Text to analyze:</label>
               <textarea
                 onChange={this.handleChange}
                 name="text"
-                rows="10"
-                cols="60"
+                rows="5"
+                cols="40"
                 value={this.state.text}
+                placeholder="Enter text to analyze"
               />
               <br />
               <input type="submit" value="Submit" />
@@ -246,6 +249,7 @@ export class Text extends React.Component {
           </div>
           <div className="analysis">
             <select
+              className="select-data"
               onChange={e => this.addText(e.target.value, 'textTwo')}
               id="text-select"
             >
@@ -259,13 +263,13 @@ export class Text extends React.Component {
               })}
             </select>
             <form onSubmit={this.handleSubmitTwo}>
-              <label>Text to analyze 2:</label>
               <textarea
                 onChange={this.handleChange}
                 name="textTwo"
-                rows="10"
-                cols="60"
+                rows="5"
+                cols="40"
                 value={this.state.textTwo}
+                placeholder="Enter text to analyze"
               />
               <br />
               <input type="submit" value="Submit" />

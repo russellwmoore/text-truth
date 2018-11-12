@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  background-color: #deedf9;
 }
 
 a {
@@ -23,6 +24,7 @@ form div {
 .container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .analysis {
@@ -31,7 +33,8 @@ form div {
 }
 
 .uniqe-words {
-  background-color: red;
+  color: #ffffea;
+  background-color: #9ea8af;
   display: inline-block;
   margin: 5px;
   padding: 10px;
@@ -43,9 +46,72 @@ form div {
 }
 
 .word-analysis {
-  background-color: blue;
+  color: #0d1f2d;
+  background-color: #accbe2;
   display: inline-block;
   margin: 5px;
   padding: 10px;
   border-radius: 10px;
+}
+
+textarea {
+  background-color: #deedf9;
+  border-radius: 10px;
+  padding: 10px;
+  line-height: 1.6em;
+  color: #0d1f2d;
+  border: 1px solid #53697a;
+  resize: none;
+  font-size: 16px;
+}
+
+::-webkit-scrollbar {
+  width: 1em;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  border-radius: 10px;
+}
+
+.wrapper {
+  padding: 20px;
+}
+
+.select-data {
+  margin-bottom: 10px;
+}
+
+input {
+  border-radius: 0.25rem;
+  color: #0d1f2d;
+  background-color: #accbe2;
+  font-family: system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem;
+  cursor: pointer;
+}
+
+textarea:focus {
+  border-radius: 10px;
+  outline: none;
+  background-color: #b6c2cc;
+}
+
+#title-container {
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  width: 245px;
+  margin: 0 auto;
+  text-align: center;
 }
