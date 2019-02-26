@@ -2,9 +2,6 @@
   "name": "text-truth",
   "version": "1.0.0",
   "description": "How do words work?",
-  "engines": {
-    "node": ">= 7.0.0"
-  },
   "main": "index.js",
   "scripts": {
     "build-client": "webpack",
