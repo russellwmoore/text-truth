@@ -10,9 +10,7 @@ const {IamAuthenticator} = require('ibm-watson/auth')
 
 const toneAnalyzer = new ToneAnalyzerV3({
   version: '2017-09-21',
-  authenticator: new IamAuthenticator({
-    apikey: process.env.WATSON_API,
-  }),
+  authenticator: new IamAuthenticator({apikey: process.env.WATSON_API}),
   url: 'https://gateway-wdc.watsonplatform.net/tone-analyzer/api',
 })
 
