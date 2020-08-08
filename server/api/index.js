@@ -1,7 +1,7 @@
 const router = require('express').Router()
 module.exports = router
 
-router.use('/personality', require('./personality'))
+// router.use('/personality', require('./personality'))
 router.use('/tone', require('./tone'))
 
 router.use((req, res, next) => {

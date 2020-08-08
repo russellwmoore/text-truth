@@ -22,7 +22,7 @@ export class Text extends React.Component {
       totalWords2: [],
       sentiments: [],
       sentimentsTwo: [],
-      samples: sampleData
+      samples: sampleData,
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmitTwo = this.handleSubmitTwo.bind(this)
@@ -32,7 +32,7 @@ export class Text extends React.Component {
 
   handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     })
   }
 
@@ -89,7 +89,7 @@ export class Text extends React.Component {
       '—',
       'his',
       'it',
-      'but'
+      'but',
     ]
     // const weakWords = []
     for (const words in wordObject) {
@@ -146,7 +146,7 @@ export class Text extends React.Component {
 
   addText(event, state) {
     this.setState({
-      [state]: sampleData[event]
+      [state]: sampleData[event],
     })
   }
 
@@ -156,13 +156,13 @@ export class Text extends React.Component {
       console.log('pressed!')
       console.log(this.state.text)
       let res = await axios.post('/api/tone', {text: this.state.text})
-      console.log(res.data.document_tone.tones)
+      console.log(res.data)
       this.setState({
         tones: res.data.document_tone.tones,
         uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 20),
         uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length,
         sentiments: this.makeSentimentArray(res.data.document_tone.tones),
-        totalWords: this.getWords(this.state.text)
+        totalWords: this.getWords(this.state.text),
       })
     } catch (error) {
       console.error(error)
@@ -187,7 +187,7 @@ export class Text extends React.Component {
         uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo))
           .length,
         sentimentsTwo: this.makeSentimentArray(res.data.document_tone.tones),
-        totalWordsTwo: this.getWords(this.state.textTwo)
+        totalWordsTwo: this.getWords(this.state.textTwo),
       })
     } catch (error) {
       console.error(error)
@@ -208,11 +208,11 @@ export class Text extends React.Component {
           <div className="analysis">
             <select
               className="select-data"
-              onChange={e => this.addText(e.target.value, 'text')}
+              onChange={(e) => this.addText(e.target.value, 'text')}
               id="text-select"
             >
               <option value="">--Sample Text--</option>
-              {samplesArr.map(sample => {
+              {samplesArr.map((sample) => {
                 return (
                   <option key={`${sample}`} value={`${sample}`}>
                     {sample}
@@ -250,7 +250,7 @@ export class Text extends React.Component {
               )}
             </div>
             <div className="unique-words-container">
-              {words.map(word => {
+              {words.map((word) => {
                 return (
                   <div className="uniqe-words" key={word}>
                     {word} : {this.state.uniqueWords[word]}
@@ -262,11 +262,11 @@ export class Text extends React.Component {
           <div className="analysis">
             <select
               className="select-data"
-              onChange={e => this.addText(e.target.value, 'textTwo')}
+              onChange={(e) => this.addText(e.target.value, 'textTwo')}
               id="text-select"
             >
               <option value="">--Sample Text--</option>
-              {samplesArr.map(sample => {
+              {samplesArr.map((sample) => {
                 return (
                   <option key={`${sample}`} value={`${sample}`}>
                     {sample}
@@ -304,7 +304,7 @@ export class Text extends React.Component {
               )}
             </div>
             <div className="unique-words-container">
-              {wordsTwo.map(word => {
+              {wordsTwo.map((word) => {
                 return (
                   <div className="uniqe-words" key={word}>
                     {word} : {this.state.uniqueWordsTwo[word]}

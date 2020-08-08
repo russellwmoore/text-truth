@@ -1,9 +1,9 @@
-const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
-const personalityInsights = new PersonalityInsightsV3({
-  version: '2017-09-21',
-  iam_apikey: process.env.PERSONALITY_API,
-  url: 'https://gateway-wdc.watsonplatform.net/personality-insights/api'
-});
+// const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
+// const personalityInsights = new PersonalityInsightsV3({
+//   version: '2017-09-21',
+//   iam_apikey: process.env.PERSONALITY_API,
+//   url: 'https://gateway-wdc.watsonplatform.net/personality-insights/api'
+// });
 
 // var profileParams = {
 //   // Get the content from the JSON file.
@@ -22,5 +22,5 @@ const personalityInsights = new PersonalityInsightsV3({
 // });
 
 module.exports = {
-  personalityInsights
+  personalityInsights,
 }
