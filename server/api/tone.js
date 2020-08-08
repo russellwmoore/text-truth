@@ -13,7 +13,7 @@ router.post('/', (req, res, next) => {
       // console.log(error);
       res.send(error)
     } else {
-      // console.log(JSON.stringify(toneAnalysis, null, 2));
+      console.log(JSON.stringify(toneAnalysis, null, 2))
       res.send(JSON.stringify(toneAnalysis, null, 2))
     }
   })

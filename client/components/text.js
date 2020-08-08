@@ -39,11 +39,11 @@ export class Text extends React.Component {
   getWords(string) {
     const lowerCase = string.toLowerCase()
     const noPunct = lowerCase.replace(
-      /[!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g,
+      /[!"\#$%&()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g,
       ''
     )
     return noPunct
-      .replace(/(\r\n|\n|\r)/gm, ' ')
+      .replace(/(\r\n|\n|\r)/gm)
       .split(' ')
       .sort()
   }

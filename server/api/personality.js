@@ -1,11 +1,8 @@
 const router = require('express').Router()
-const { personalityInsights } = require('../personality')
-
-
+const {personalityInsights} = require('../personality')
 
 router.post('/', (req, res, next) => {
   console.log(`this is req.body`, req.body)
-
 
   // for reference
   // var profileParams = {
@@ -21,21 +18,16 @@ router.post('/', (req, res, next) => {
     content: req.body,
     content_type: 'application/json',
     consumption_preferences: true,
-    raw_scores: true
-  };
+    raw_scores: true,
+  }
 
   personalityInsights.profile(profileParams, function (error, profile) {
     if (error) {
-      console.log(error);
+      console.log(error)
     } else {
-      console.log(JSON.stringify(profile, null, 2));
+      console.log(JSON.stringify(profile, null, 2))
     }
-  });
-
+  })
 })
 
-
-
-
 module.exports = router
-
