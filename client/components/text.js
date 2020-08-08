@@ -156,12 +156,14 @@ export class Text extends React.Component {
       console.log('pressed!')
       console.log(this.state.text)
       let res = await axios.post('/api/tone', {text: this.state.text})
-      console.log(res.data)
+      console.log(res)
       this.setState({
-        tones: res.data.document_tone.tones,
+        tones: res.data.result.document_tone.tones,
         uniqueWords: this.topNWords(this.uniqueWords(this.state.text), 20),
         uniqueWordsCount: Object.keys(this.uniqueWords(this.state.text)).length,
-        sentiments: this.makeSentimentArray(res.data.document_tone.tones),
+        sentiments: this.makeSentimentArray(
+          res.data.result.document_tone.tones
+        ),
         totalWords: this.getWords(this.state.text),
       })
     } catch (error) {
@@ -176,17 +178,19 @@ export class Text extends React.Component {
       console.log(this.state.textTwo)
       let res = await axios.post('/api/tone', {text: this.state.textTwo})
       // let resTwo = await axios.post('/api/personality', { content: this.state.text })
-      console.log(res.data.document_tone.tones)
+      console.log(res.data.result.document_tone.tones)
       // console.log(resTwo.data)
       this.setState({
-        tonesTwo: res.data.document_tone.tones,
+        tonesTwo: res.data.result.document_tone.tones,
         uniqueWordsTwo: this.topNWords(
           this.uniqueWords(this.state.textTwo),
           20
         ),
         uniqueWordsCountTwo: Object.keys(this.uniqueWords(this.state.textTwo))
           .length,
-        sentimentsTwo: this.makeSentimentArray(res.data.document_tone.tones),
+        sentimentsTwo: this.makeSentimentArray(
+          res.data.result.document_tone.tones
+        ),
         totalWordsTwo: this.getWords(this.state.textTwo),
       })
     } catch (error) {

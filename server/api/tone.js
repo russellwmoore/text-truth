@@ -1,16 +1,17 @@
 const router = require('express').Router()
-const {toneAnalyzer, toneParams} = require('../tone')
+const {toneAnalyzer} = require('../tone')
 
 router.post('/', (req, res, next) => {
   console.log(`this is req.body`, req.body)
   const toneParams = {
-    tone_input: {text: req.body.text},
-    content_type: 'application/json'
+    toneInput: {text: req.body.text},
+    content_type: 'application/json',
   }
 
-  toneAnalyzer.tone(toneParams, function(error, toneAnalysis) {
+  toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
+    console.log('running')
     if (error) {
-      // console.log(error);
+      console.log(error)
       res.send(error)
     } else {
       console.log(JSON.stringify(toneAnalysis, null, 2))
