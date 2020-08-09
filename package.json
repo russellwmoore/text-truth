@@ -6,7 +6,7 @@
   "scripts": {
     "build-client": "webpack",
     "build-client-watch": "webpack -w",
-    "heroku-postbuild" : "webpack",
+    "heroku-postbuild": "webpack",
     "deploy": "script/deploy",
     "heroku-token": "script/encrypt-heroku-auth-token",
     "lint": "eslint ./ --ignore-path .gitignore",
